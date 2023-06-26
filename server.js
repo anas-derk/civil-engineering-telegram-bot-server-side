@@ -66,11 +66,11 @@ let userChoises = {};
 
 const axios = require("axios");
 
-async function processUserChoices(chatId, userChoices) {
+async function processUserChoices(chatId, choises) {
     try {
-        switch (userChoices.service) {
+        switch (choises.service) {
             case "medallion": {
-                const res = await axios.get(`http://localhost:4000/medallions/custom-medallions?year=${userChoices.year}&season=${userChoises.season}`);
+                const res = await axios.get(`http://localhost:4000/medallions/custom-medallions?year=${choises.year}&season=${choises.season}`);
                 const data = await res.data;
                 if (data.length === 0) {
                     await bot.sendMessage(chatId, "عذراً لا توجد ملفات حالياً");
@@ -81,7 +81,7 @@ async function processUserChoices(chatId, userChoices) {
                 break;
             }
             case "courses": {
-                const res = await axios.get(`http://localhost:4000/courses/custom-courses?year=${userChoices.year}&season=${userChoises.season}`);
+                const res = await axios.get(`http://localhost:4000/courses/custom-courses?year=${choises.year}&season=${choises.season}`);
                 const data = await res.data;
                 if (data.length === 0) {
                     await bot.sendMessage(chatId, "عذراً لا توجد ملفات حالياً");
@@ -92,7 +92,7 @@ async function processUserChoices(chatId, userChoices) {
                 break;
             }
             case "lectures": {
-                const res = await axios.get(`http://localhost:4000/lectures/custom-lectures?year=${userChoices.year}&season=${userChoises.season}`);
+                const res = await axios.get(`http://localhost:4000/lectures/custom-lectures?year=${choises.year}&season=${choises.season}`);
                 const data = await res.data;
                 if (data.length === 0) {
                     await bot.sendMessage(chatId, "عذراً لا توجد ملفات حالياً");
@@ -123,8 +123,8 @@ bot.onText(/\/start/, async (msg) => {
         await bot.sendMessage(chatId, "الرجاء اختيار السنة", {
             reply_markup: {
                 inline_keyboard: [
-                    [{ text: "سنة أولى", callback_data: "first_year" }],
-                    [{ text: "سنة ثانية", callback_data: "second_year" }],
+                    [{ text: "سنة أولى", callback_data: "first-year" }],
+                    [{ text: "سنة ثانية", callback_data: "second-year" }],
                 ],
             }
         })
@@ -137,17 +137,17 @@ bot.on("callback_query", async (query) => {
     if (!userChoises[chatId]) {
         userChoises[chatId] = { year: null, season: null, service: null };
     }
-    if (selectedValue === "first_year" || selectedValue === "second_year") {
+    if (selectedValue === "first-year" || selectedValue === "second-year") {
         userChoises[chatId].year = selectedValue;
         await bot.sendMessage(chatId, "الرجاء اختيار الفصل", {
             reply_markup: {
                 inline_keyboard: [
-                    [{ text: "فصل أول", callback_data: "first_season" }],
-                    [{ text: "فصل ثاني", callback_data: "second_season" }],
+                    [{ text: "فصل أول", callback_data: "first-season" }],
+                    [{ text: "فصل ثاني", callback_data: "second-season" }],
                 ],
             }
         });
-    } else if (selectedValue === "first_season" || selectedValue === "second_season") {
+    } else if (selectedValue === "first-season" || selectedValue === "second-season") {
         userChoises[chatId].season = selectedValue;
         await bot.sendMessage(chatId, "الرجاء اختيار الخدمة المطلوبة", {
             reply_markup: {
