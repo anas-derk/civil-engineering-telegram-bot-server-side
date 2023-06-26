@@ -38,9 +38,21 @@ const lecturesSchema = new mongoose.Schema({
 
 const lecturesModel = mongoose.model("lecture", lecturesSchema);
 
+// إنشاء كائن هيكل جدول المسؤولين
+
+const adminSchema = new mongoose.Schema({
+    email: String,
+    password: String,
+});
+
+// إنشاء كائن جدول المسؤولين
+
+const adminModel = mongoose.model("admin", adminSchema);
+
 module.exports = {
     mongoose,
     medallionModel,
     coursesModel,
     lecturesModel,
+    adminModel,
 }
