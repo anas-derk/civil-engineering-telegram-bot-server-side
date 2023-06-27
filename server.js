@@ -54,15 +54,15 @@ app.use("/lectures", lecturesRouter);
 
 /* Start Handle Telegram Bot Events */
 
-const token = "6144878734:AAEs-LFCqOxflfk-5zBqiEON68FPjHpBEqQ";
+const token = "6208009889:AAHn2kqO2IS2ojG-dYpNpOBcOCp1pWgvAXo";
 
 const TelegramBot = require('node-telegram-bot-api');
 
 const bot = new TelegramBot(token, { polling: true });
 
-const channelId = "@anaas221";
+const channelId = "@Civil_Engineering_TU";
 
-const channeURL = "https://t.me/anaas221";
+const channeURL = "https://t.me/Civil_Engineering_TU";
 
 let userChoises = {};
 
@@ -74,7 +74,10 @@ async function getCustomFile(year, season, apiRoute, chatId) {
     if (data.length === 0) {
         await bot.sendMessage(chatId, "عذراً لا توجد ملفات حالياً");
     } else {
-        await bot.sendMessage(chatId, `${BASE_API_URL}/${data[0].fileUrl}`);
+        const fileUrl = `${BASE_API_URL}/${data[0].fileUrl}`;
+        const response = await axios.get(fileUrl, { responseType: 'arraybuffer' });
+        // await bot.sendMessage(chatId, `${BASE_API_URL}/${data[0].fileUrl}`);
+        await bot.sendDocument(chatId, response.data);
     }
 }
 
