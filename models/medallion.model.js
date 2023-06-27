@@ -37,8 +37,7 @@ async function addNewFile(data) {
     }
 }
 
-async function getAllMedallions(requestInfo) {
-    console.log(requestInfo);
+async function getCustomMedallionFile(requestInfo) {
     try {
         // الاتصال بقاعدة البيانات
         await mongoose.connect(DB_URL);
@@ -47,7 +46,6 @@ async function getAllMedallions(requestInfo) {
             year: requestInfo.year,
             season: requestInfo.season,
         });
-        console.log(medallions);
         return medallions;
     } catch (err) {
         // في حالة حدث خطأ أثناء العملية ، نقطع الاتصال ونرمي استثناء بالخطأ
@@ -58,5 +56,5 @@ async function getAllMedallions(requestInfo) {
 
 module.exports = {
     addNewFile,
-    getAllMedallions,
+    getCustomMedallionFile,
 }

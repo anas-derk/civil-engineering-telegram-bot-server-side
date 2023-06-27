@@ -37,7 +37,7 @@ async function addNewFile(data) {
     }
 }
 
-async function getAllLectures(requestInfo) {
+async function getCustomLectureFile(requestInfo) {
     try {
         // الاتصال بقاعدة البيانات
         await mongoose.connect(DB_URL);
@@ -56,5 +56,5 @@ async function getAllLectures(requestInfo) {
 
 module.exports = {
     addNewFile,
-    getAllLectures,
+    getCustomLectureFile,
 }

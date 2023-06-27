@@ -23,6 +23,8 @@ app.use("/assets", express.static(path.join(__dirname, "assets")));
 
 /* End direct the browser to statics files path */
 
+const BASE_API_URL = require("./global/BASE_API_URL");
+
 /* End Config The Server */
 
 /* Start Running The Server */
@@ -66,40 +68,29 @@ let userChoises = {};
 
 const axios = require("axios");
 
+async function getCustomFile(year, season, apiRoute, chatId) {
+    const res = await axios.get(`${BASE_API_URL}${apiRoute}?year=${year}&season=${season}`);
+    const data = await res.data;
+    if (data.length === 0) {
+        await bot.sendMessage(chatId, "عذراً لا توجد ملفات حالياً");
+    } else {
+        await bot.sendMessage(chatId, `${BASE_API_URL}/${data[0].fileUrl}`);
+    }
+}
+
 async function processUserChoices(chatId, choises) {
     try {
         switch (choises.service) {
             case "medallion": {
-                const res = await axios.get(`http://localhost:4000/medallions/custom-medallions?year=${choises.year}&season=${choises.season}`);
-                const data = await res.data;
-                if (data.length === 0) {
-                    await bot.sendMessage(chatId, "عذراً لا توجد ملفات حالياً");
-                } else {
-                    console.log(data);
-                    await bot.sendMessage(chatId, data[0].fileUrl);
-                }
+                await getCustomFile(choises.year, choises.season, "/medallions/custom-medallion-file", chatId);
                 break;
             }
             case "courses": {
-                const res = await axios.get(`http://localhost:4000/courses/custom-courses?year=${choises.year}&season=${choises.season}`);
-                const data = await res.data;
-                if (data.length === 0) {
-                    await bot.sendMessage(chatId, "عذراً لا توجد ملفات حالياً");
-                } else {
-                    console.log(data);
-                    await bot.sendMessage(chatId, data[0].fileUrl);
-                }
+                await getCustomFile(choises.year, choises.season, "/courses/custom-course-file", chatId);
                 break;
             }
             case "lectures": {
-                const res = await axios.get(`http://localhost:4000/lectures/custom-lectures?year=${choises.year}&season=${choises.season}`);
-                const data = await res.data;
-                if (data.length === 0) {
-                    await bot.sendMessage(chatId, "عذراً لا توجد ملفات حالياً");
-                } else {
-                    console.log(data);
-                    await bot.sendMessage(chatId, data[0].fileUrl);
-                }
+                await getCustomFile(choises.year, choises.season, "/lectures/custom-lecture-file", chatId);
                 break;
             }
             default: {
