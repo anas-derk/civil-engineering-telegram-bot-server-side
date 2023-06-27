@@ -7,6 +7,7 @@ const mongoose = require("mongoose");
 const medallionSchema = new mongoose.Schema({
     year: String,
     season: String,
+    subject: String,
     fileUrl: String,
 });
 
@@ -19,6 +20,7 @@ const medallionModel = mongoose.model("medallion", medallionSchema);
 const coursesSchema = new mongoose.Schema({
     year: String,
     season: String,
+    subject: String,
     fileUrl: String,
 });
 
@@ -31,6 +33,7 @@ const coursesModel = mongoose.model("course", coursesSchema);
 const lecturesSchema = new mongoose.Schema({
     year: String,
     season: String,
+    subject: String,
     fileUrl: String,
 });
 

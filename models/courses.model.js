@@ -22,6 +22,7 @@ async function addNewFile(data) {
             let newFile = new coursesModel({
                 year: data.year,
                 season: data.season,
+                subject: data.subject,
                 fileUrl: data.fileUrl,
             });
             // حفظ رابط الملف في قاعدة البيانات
@@ -54,7 +55,22 @@ async function getCustomCourseFile(requestInfo) {
     }
 }
 
+async function getAllCourses() {
+    try {
+        // الاتصال بقاعدة البيانات
+        await mongoose.connect(DB_URL);
+        // جلب كل روابط الكورسات في جدول الكورسات
+        const courses = await coursesModel.find({});
+        return courses;
+    } catch (err) {
+        // في حالة حدث خطأ أثناء العملية ، نقطع الاتصال ونرمي استثناء بالخطأ
+        mongoose.disconnect();
+        throw Error(err);
+    }
+}
+
 module.exports = {
     addNewFile,
     getCustomCourseFile,
+    getAllCourses,
 }

@@ -1,8 +1,8 @@
 const lecturesRouter = require("express").Router();
 
-lecturesRouter.get("/custom-lecture-file", (req, res) => {
-    const { getCustomLectureFile } = require("../models/lectures.model");
-    getCustomLectureFile(req.query).then((result) => {
+lecturesRouter.get("/all-lectures", (req, res) => {
+    const { getAllLectures } = require("../models/lectures.model");
+    getAllLectures().then((result) => {
         res.json(result);
     }).catch(err => console.log(err));
 });

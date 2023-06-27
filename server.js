@@ -68,6 +68,12 @@ let userChoises = {};
 
 const axios = require("axios");
 
+async function getAllFiles(apiRoute) {
+    const res = await axios.get(`${BASE_API_URL}/${apiRoute}`);
+    const data = await res.data;
+    return data;
+}
+
 async function getCustomFile(year, season, apiRoute, chatId) {
     const res = await axios.get(`${BASE_API_URL}${apiRoute}?year=${year}&season=${season}`);
     const data = await res.data;
@@ -131,7 +137,7 @@ bot.on("callback_query", async (query) => {
     const selectedValue = query.data;
     const chatId = query.message.chat.id;
     if (!userChoises[chatId]) {
-        userChoises[chatId] = { year: null, season: null, service: null };
+        userChoises[chatId] = { year: null, season: null, service: null, fileId: null };
     }
     if (selectedValue === "first-year"
         || selectedValue === "second-year"
@@ -159,8 +165,23 @@ bot.on("callback_query", async (query) => {
                 ],
             }
         });
-    } else if (selectedValue === "medallion" || selectedValue === "courses" || selectedValue === "lectures") {
+    } else if (selectedValue === "medallion") {
         userChoises[chatId].service = selectedValue;
+        const data = await getAllFiles(`${BASE_API_URL}/all-courses`);
+        console.log(data);
+        // await bot.sendMessage(chatId, "الرجاء اختيار الخدمة المطلوبة", {
+        //     reply_markup: {
+        //         inline_keyboard: [
+        //             [{ text: "محاضرات", callback_data: "lectures" }],
+        //             [{ text: "دورات", callback_data: "courses" }],
+        //             [{ text: "نوط", callback_data: "medallion" }],
+        //         ],
+        //     }
+        // });
+    }
+    else {
+        getAllFiles(`${BASE_API_URL}/all-courses`)
+        userChoises[chatId].fileId = selectedValue;
         processUserChoices(chatId, userChoises[chatId]);
     }
 });

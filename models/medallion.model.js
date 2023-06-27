@@ -22,6 +22,7 @@ async function addNewFile(data) {
             const newFile = new medallionModel({
                 year: data.year,
                 season: data.season,
+                subject: data.subject,
                 fileUrl: data.fileUrl,
             });
             // حفظ رابط الملف في قاعدة البيانات
@@ -54,7 +55,22 @@ async function getCustomMedallionFile(requestInfo) {
     }
 }
 
+async function getAllMedallions() {
+    try {
+        // الاتصال بقاعدة البيانات
+        await mongoose.connect(DB_URL);
+        // جلب كل روابط النوط في جدول النوط
+        const medallions = await medallionModel.find({});
+        return medallions;
+    } catch (err) {
+        // في حالة حدث خطأ أثناء العملية ، نقطع الاتصال ونرمي استثناء بالخطأ
+        mongoose.disconnect();
+        throw Error(err);
+    }
+}
+
 module.exports = {
     addNewFile,
     getCustomMedallionFile,
+    getAllMedallions,
 }

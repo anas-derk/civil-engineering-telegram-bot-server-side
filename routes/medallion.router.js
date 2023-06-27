@@ -7,4 +7,11 @@ medallionsRouter.get("/custom-medallion-file", (req, res) => {
     }).catch(err => console.log(err));
 });
 
+medallionsRouter.get("/all-medallions", (req, res) => {
+    const { getAllMedallions } = require("../models/medallion.model");
+    getAllMedallions().then((result) => {
+        res.json(result);
+    }).catch(err => console.log(err));
+});
+
 module.exports = medallionsRouter;

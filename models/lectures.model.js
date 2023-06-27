@@ -22,6 +22,7 @@ async function addNewFile(data) {
             let newFile = new lecturesModel({
                 year: data.year,
                 season: data.season,
+                subject: data.subject,
                 fileUrl: data.fileUrl,
             });
             // حفظ رابط الملف في قاعدة البيانات
@@ -54,7 +55,22 @@ async function getCustomLectureFile(requestInfo) {
     }
 }
 
+async function getAllLectures() {
+    try {
+        // الاتصال بقاعدة البيانات
+        await mongoose.connect(DB_URL);
+        // جلب كل روابط المحاضرات في جدول المحاضرات
+        const lectures = await lecturesModel.find({});
+        return lectures;
+    } catch (err) {
+        // في حالة حدث خطأ أثناء العملية ، نقطع الاتصال ونرمي استثناء بالخطأ
+        mongoose.disconnect();
+        throw Error(err);
+    }
+}
+
 module.exports = {
     addNewFile,
     getCustomLectureFile,
+    getAllLectures,
 }
