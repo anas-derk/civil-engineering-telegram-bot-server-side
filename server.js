@@ -76,7 +76,6 @@ async function getCustomFile(year, season, apiRoute, chatId) {
     } else {
         const fileUrl = `${BASE_API_URL}/${data[0].fileUrl}`;
         const response = await axios.get(fileUrl, { responseType: 'arraybuffer' });
-        // await bot.sendMessage(chatId, `${BASE_API_URL}/${data[0].fileUrl}`);
         await bot.sendDocument(chatId, response.data);
     }
 }
@@ -119,6 +118,9 @@ bot.onText(/\/start/, async (msg) => {
                 inline_keyboard: [
                     [{ text: "سنة أولى", callback_data: "first-year" }],
                     [{ text: "سنة ثانية", callback_data: "second-year" }],
+                    [{ text: "سنة ثالثة", callback_data: "third-year" }],
+                    [{ text: "سنة رابعة", callback_data: "fourth-year" }],
+                    [{ text: "سنة خامسة", callback_data: "fifth-year" }],
                 ],
             }
         })
@@ -131,7 +133,12 @@ bot.on("callback_query", async (query) => {
     if (!userChoises[chatId]) {
         userChoises[chatId] = { year: null, season: null, service: null };
     }
-    if (selectedValue === "first-year" || selectedValue === "second-year") {
+    if (selectedValue === "first-year"
+        || selectedValue === "second-year"
+        || selectedValue === "third-year"
+        || selectedValue === "fourth-year"
+        || selectedValue === "fifth-year"
+    ) {
         userChoises[chatId].year = selectedValue;
         await bot.sendMessage(chatId, "الرجاء اختيار الفصل", {
             reply_markup: {
@@ -146,9 +153,9 @@ bot.on("callback_query", async (query) => {
         await bot.sendMessage(chatId, "الرجاء اختيار الخدمة المطلوبة", {
             reply_markup: {
                 inline_keyboard: [
-                    [{ text: "نوط", callback_data: "medallion" }],
-                    [{ text: "دورات", callback_data: "courses" }],
                     [{ text: "محاضرات", callback_data: "lectures" }],
+                    [{ text: "دورات", callback_data: "courses" }],
+                    [{ text: "نوط", callback_data: "medallion" }],
                 ],
             }
         });
