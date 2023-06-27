@@ -1,3 +1,3 @@
-const BASE_API_URL = "http://localhost:4000";
+const BASE_API_URL = "https://api.civil-engineering-tu.online";
 
 module.exports = BASE_API_URL;
