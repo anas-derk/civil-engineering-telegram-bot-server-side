@@ -55,12 +55,15 @@ async function getCustomCourseFile(requestInfo) {
     }
 }
 
-async function getAllCourses() {
+async function getAllCustomCourses(filteredData) {
     try {
         // الاتصال بقاعدة البيانات
         await mongoose.connect(DB_URL);
         // جلب كل روابط الكورسات في جدول الكورسات
-        const courses = await coursesModel.find({});
+        const courses = await coursesModel.find({
+            year: filteredData.year,
+            season: filteredData.season,
+        });
         return courses;
     } catch (err) {
         // في حالة حدث خطأ أثناء العملية ، نقطع الاتصال ونرمي استثناء بالخطأ
@@ -72,5 +75,5 @@ async function getAllCourses() {
 module.exports = {
     addNewFile,
     getCustomCourseFile,
-    getAllCourses,
+    getAllCustomCourses,
 }

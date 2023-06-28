@@ -1,7 +1,9 @@
 const axios = require("axios");
 
-async function getAllFiles(apiRoute) {
-    const res = await axios.get(`${BASE_API_URL}/${apiRoute}`);
+const BASE_API_URL = require("../global/BASE_API_URL");
+
+async function getCustomSubjects(apiRoute) {
+    const res = await axios.get(`${BASE_API_URL}${apiRoute}`);
     const data = await res.data;
     return data;
 }
@@ -21,7 +23,7 @@ async function getCustomFile(year, season, apiRoute, chatId) {
 async function processUserChoices(chatId, choises) {
     try {
         switch (choises.service) {
-            case "medallion": {
+            case "medallions": {
                 await getCustomFile(choises.year, choises.season, "/medallions/custom-medallion-file", chatId);
                 break;
             }
@@ -44,7 +46,7 @@ async function processUserChoices(chatId, choises) {
 }
 
 module.exports = {
-    getAllFiles,
+    getCustomSubjects,
     getCustomFile,
     processUserChoices,
 }

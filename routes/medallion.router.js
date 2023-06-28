@@ -7,9 +7,9 @@ medallionsRouter.get("/custom-medallion-file", (req, res) => {
     }).catch(err => console.log(err));
 });
 
-medallionsRouter.get("/all-medallions", (req, res) => {
-    const { getAllMedallions } = require("../models/medallion.model");
-    getAllMedallions().then((result) => {
+medallionsRouter.get("/all-custom-medallions", (req, res) => {
+    const { getAllCustomMedallions } = require("../models/medallion.model");
+    getAllCustomMedallions(req.query).then((result) => {
         res.json(result);
     }).catch(err => console.log(err));
 });

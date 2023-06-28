@@ -7,9 +7,9 @@ coursesRouter.get("/custom-course-file", (req, res) => {
     }).catch(err => console.log(err));
 });
 
-coursesRouter.get("/all-courses", (req, res) => {
-    const { getAllCourses } = require("../models/courses.model");
-    getAllCourses(req.query).then((result) => {
+coursesRouter.get("/all-custom-courses", (req, res) => {
+    const { getAllCustomCourses } = require("../models/courses.model");
+    getAllCustomCourses(req.query).then((result) => {
         res.json(result);
     }).catch(err => console.log(err));
 });

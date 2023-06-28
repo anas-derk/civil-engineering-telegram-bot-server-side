@@ -23,8 +23,6 @@ app.use("/assets", express.static(path.join(__dirname, "assets")));
 
 /* End direct the browser to statics files path */
 
-const BASE_API_URL = require("./global/BASE_API_URL");
-
 /* End Config The Server */
 
 /* Start Running The Server */
@@ -40,7 +38,8 @@ app.listen(PORT, () => console.log(`The Server Is Running On: http://localhost:$
 const adminRouter = require("./routes/admin.router"),
     medallionsRouter = require("./routes/medallion.router"),
     coursesRouter = require("./routes/courses.router"),
-    lecturesRouter = require("./routes/lectures.router");
+    lecturesRouter = require("./routes/lectures.router"),
+    subjectsRouter = require("./routes/subjects.router");
 
 app.use("/admin", adminRouter);
 
@@ -49,5 +48,7 @@ app.use("/medallions", medallionsRouter);
 app.use("/courses", coursesRouter);
 
 app.use("/lectures", lecturesRouter);
+
+app.use("/subjects", subjectsRouter);
 
 /* End Handle The Routes */

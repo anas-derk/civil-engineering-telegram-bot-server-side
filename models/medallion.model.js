@@ -55,12 +55,15 @@ async function getCustomMedallionFile(requestInfo) {
     }
 }
 
-async function getAllMedallions() {
+async function getAllCustomMedallions(filteredData) {
     try {
         // الاتصال بقاعدة البيانات
         await mongoose.connect(DB_URL);
         // جلب كل روابط النوط في جدول النوط
-        const medallions = await medallionModel.find({});
+        const medallions = await medallionModel.find({
+            year: filteredData.year,
+            season: filteredData.season,
+        });
         return medallions;
     } catch (err) {
         // في حالة حدث خطأ أثناء العملية ، نقطع الاتصال ونرمي استثناء بالخطأ
@@ -72,5 +75,5 @@ async function getAllMedallions() {
 module.exports = {
     addNewFile,
     getCustomMedallionFile,
-    getAllMedallions,
+    getAllCustomMedallions,
 }

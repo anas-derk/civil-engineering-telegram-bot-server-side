@@ -1,8 +1,8 @@
 const lecturesRouter = require("express").Router();
 
-lecturesRouter.get("/all-lectures", (req, res) => {
-    const { getAllLectures } = require("../models/lectures.model");
-    getAllLectures().then((result) => {
+lecturesRouter.get("/all-custom-lectures", (req, res) => {
+    const { getAllCustomLectures } = require("../models/lectures.model");
+    getAllCustomLectures(req.query).then((result) => {
         res.json(result);
     }).catch(err => console.log(err));
 });

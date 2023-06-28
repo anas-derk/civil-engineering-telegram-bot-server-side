@@ -37,7 +37,7 @@ const lecturesSchema = new mongoose.Schema({
     fileUrl: String,
 });
 
-// إنشاء كائت جدول الدورات باستخدام الهيكلية السابقة
+// إنشاء كائت جدول المحاضرات باستخدام الهيكلية السابقة
 
 const lecturesModel = mongoose.model("lecture", lecturesSchema);
 
@@ -52,10 +52,23 @@ const adminSchema = new mongoose.Schema({
 
 const adminModel = mongoose.model("admin", adminSchema);
 
+// إنشاء كائن هيكل جدول المواد
+
+const subjectsSchema = new mongoose.Schema({
+    name: String,
+    year: String,
+    season: String,
+});
+
+// إنشاء كائن جدول المواد
+
+const subjectsModel = mongoose.model("subject", subjectsSchema);
+
 module.exports = {
     mongoose,
     medallionModel,
     coursesModel,
     lecturesModel,
     adminModel,
+    subjectsModel,
 }

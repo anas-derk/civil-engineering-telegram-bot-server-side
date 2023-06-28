@@ -55,12 +55,15 @@ async function getCustomLectureFile(requestInfo) {
     }
 }
 
-async function getAllLectures() {
+async function getAllCustomLectures(filteredData) {
     try {
         // الاتصال بقاعدة البيانات
         await mongoose.connect(DB_URL);
         // جلب كل روابط المحاضرات في جدول المحاضرات
-        const lectures = await lecturesModel.find({});
+        const lectures = await lecturesModel.find({
+            year: filteredData.year,
+            season: filteredData.season,
+        });
         return lectures;
     } catch (err) {
         // في حالة حدث خطأ أثناء العملية ، نقطع الاتصال ونرمي استثناء بالخطأ
@@ -72,5 +75,5 @@ async function getAllLectures() {
 module.exports = {
     addNewFile,
     getCustomLectureFile,
-    getAllLectures,
+    getAllCustomLectures,
 }

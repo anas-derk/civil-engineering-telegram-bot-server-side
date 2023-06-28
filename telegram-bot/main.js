@@ -12,7 +12,9 @@ const channeURL = "https://t.me/Civil_Engineering_TU";
 
 let userChoises = {};
 
-const { getAllFiles, getCustomFile, processUserChoices } = require("./functions");
+const BASE_API_URL = require("../global/BASE_API_URL");
+
+const { getCustomSubjects, getCustomFile, processUserChoices } = require("./functions");
 
 bot.onText(/\/start/, async (msg) => {
     const chatId = msg.chat.id;
@@ -64,28 +66,28 @@ bot.on("callback_query", async (query) => {
                 inline_keyboard: [
                     [{ text: "محاضرات", callback_data: "lectures" }],
                     [{ text: "دورات", callback_data: "courses" }],
-                    [{ text: "نوط", callback_data: "medallion" }],
+                    [{ text: "نوط", callback_data: "medallions" }],
                 ],
             }
         });
-    } else if (selectedValue === "medallion") {
+    } else if (selectedValue === "lectures" || selectedValue === "courses" || selectedValue === "medallions") {
         userChoises[chatId].service = selectedValue;
-        const data = await getAllFiles(`${BASE_API_URL}/all-courses`);
-        console.log(data);
-        // await bot.sendMessage(chatId, "الرجاء اختيار الخدمة المطلوبة", {
-        //     reply_markup: {
-        //         inline_keyboard: [
-        //             [{ text: "محاضرات", callback_data: "lectures" }],
-        //             [{ text: "دورات", callback_data: "courses" }],
-        //             [{ text: "نوط", callback_data: "medallion" }],
-        //         ],
-        //     }
-        // });
+        const data = await getCustomSubjects(`/subjects/all-custom-subjects?year=${userChoises[chatId].year}&season=${userChoises[chatId].season}`);
+        if (data.length === 0) {
+            bot.sendMessage(chatId, "عذراً لا يوجد مواد حالياً");
+        } else {
+            const subjects = data.map((subject) => [{ text: subject.name, callback_data: subject._id }]);
+            bot.sendMessage(chatId, "الرجاء اختيار المادة", {
+                reply_markup: {
+                    inline_keyboard: subjects,
+                }
+            });
+        }
     }
     else {
-        getAllFiles(`${BASE_API_URL}/all-courses`)
-        userChoises[chatId].fileId = selectedValue;
-        processUserChoices(chatId, userChoises[chatId]);
+        // getAllFiles(`${BASE_API_URL}/all-courses`)
+        // userChoises[chatId].fileId = selectedValue;
+        // processUserChoices(chatId, userChoises[chatId]);
     }
 });
 
