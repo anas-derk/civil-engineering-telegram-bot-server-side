@@ -14,7 +14,7 @@ let userChoises = {};
 
 const BASE_API_URL = require("../global/BASE_API_URL");
 
-const { getCustomSubjects, getCustomFile, processUserChoices } = require("./functions");
+const { getCustomSubjects, getCustomFiles, getCustomFile, processUserChoices } = require("./functions");
 
 bot.onText(/\/start/, async (msg) => {
     const chatId = msg.chat.id;
@@ -42,7 +42,7 @@ bot.on("callback_query", async (query) => {
     const selectedValue = query.data;
     const chatId = query.message.chat.id;
     if (!userChoises[chatId]) {
-        userChoises[chatId] = { year: null, season: null, service: null, fileId: null };
+        userChoises[chatId] = { year: null, season: null, service: null, subject: null, fileId: null };
     }
     if (selectedValue === "first-year"
         || selectedValue === "second-year"
@@ -76,8 +76,8 @@ bot.on("callback_query", async (query) => {
         if (data.length === 0) {
             bot.sendMessage(chatId, "عذراً لا يوجد مواد حالياً");
         } else {
-            const subjects = data.map((subject) => [{ text: subject.name, callback_data: subject._id }]);
-            bot.sendMessage(chatId, "الرجاء اختيار المادة", {
+            const subjects = data.map((subject) => [{ text: subject.name, callback_data: subject.name }]);
+            await bot.sendMessage(chatId, "الرجاء اختيار المادة", {
                 reply_markup: {
                     inline_keyboard: subjects,
                 }
@@ -85,7 +85,59 @@ bot.on("callback_query", async (query) => {
         }
     }
     else {
-        // getAllFiles(`${BASE_API_URL}/all-courses`)
+        userChoises[chatId].subject = selectedValue;
+        try {
+            switch (userChoises[chatId].service) {
+                case "medallions": {
+                    const data = await getCustomFiles(userChoises[chatId].year, userChoises[chatId].season, userChoises[chatId].subject, "/medallions/all-custom-medallions", chatId);
+                    if (data.length === 0) {
+                        await bot.sendMessage(chatId, "عذراً لا توجد ملفات حالياً");
+                    } else {
+                        const customFiles = data.map((file) => [{ text: file.name, callback_data: file._id }]);
+                        await bot.sendMessage(chatId, "الرجاء اختيار اسم الملف المطلوب", {
+                            reply_markup: {
+                                inline_keyboard: customFiles,
+                            }
+                        });
+                    }
+                    break;
+                }
+                case "courses": {
+                    const data = await getCustomFiles(userChoises[chatId].year, userChoises[chatId].season, userChoises[chatId].subject, "/courses/all-custom-courses", chatId);
+                    if (data.length === 0) {
+                        await bot.sendMessage(chatId, "عذراً لا توجد ملفات حالياً");
+                    } else {
+                        const customFiles = data.map((file) => [{ text: file.name, callback_data: file._id }]);
+                        await bot.sendMessage(chatId, "الرجاء اختيار اسم الملف المطلوب", {
+                            reply_markup: {
+                                inline_keyboard: customFiles,
+                            }
+                        });
+                    }
+                    break;
+                }
+                case "lectures": {
+                    const data = await getCustomFiles(userChoises[chatId].year, userChoises[chatId].season, userChoises[chatId].subject, "/lectures/all-custom-lectures", chatId);
+                    if (data.length === 0) {
+                        await bot.sendMessage(chatId, "عذراً لا توجد ملفات حالياً");
+                    } else {
+                        const customFiles = data.map((file) => [{ text: file.name, callback_data: file._id }]);
+                        await bot.sendMessage(chatId, "الرجاء اختيار اسم الملف المطلوب", {
+                            reply_markup: {
+                                inline_keyboard: customFiles,
+                            }
+                        });
+                    }
+                    break;
+                }
+                default: {
+                    console.log(err);
+                }
+            }
+        }
+        catch (err) {
+            console.log(err);
+        }
         // userChoises[chatId].fileId = selectedValue;
         // processUserChoices(chatId, userChoises[chatId]);
     }

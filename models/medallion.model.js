@@ -23,6 +23,7 @@ async function addNewFile(data) {
                 year: data.year,
                 season: data.season,
                 subject: data.subject,
+                name: data.name,
                 fileUrl: data.fileUrl,
             });
             // حفظ رابط الملف في قاعدة البيانات
@@ -63,6 +64,7 @@ async function getAllCustomMedallions(filteredData) {
         const medallions = await medallionModel.find({
             year: filteredData.year,
             season: filteredData.season,
+            subject: filteredData.subject,
         });
         return medallions;
     } catch (err) {

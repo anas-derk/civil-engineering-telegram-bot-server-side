@@ -8,6 +8,7 @@ const medallionSchema = new mongoose.Schema({
     year: String,
     season: String,
     subject: String,
+    name: String,
     fileUrl: String,
 });
 
@@ -21,6 +22,7 @@ const coursesSchema = new mongoose.Schema({
     year: String,
     season: String,
     subject: String,
+    name: String,
     fileUrl: String,
 });
 
@@ -34,6 +36,7 @@ const lecturesSchema = new mongoose.Schema({
     year: String,
     season: String,
     subject: String,
+    name: String,
     fileUrl: String,
 });
 

@@ -8,8 +8,14 @@ async function getCustomSubjects(apiRoute) {
     return data;
 }
 
+async function getCustomFiles(year, season, subject, apiRoute, chatId) {
+    const res = await axios.get(`${BASE_API_URL}${apiRoute}?year=${year}&season=${season}&subject=${subject}`);
+    const data = await res.data;
+    return data;
+}
+
 async function getCustomFile(year, season, apiRoute, chatId) {
-    const res = await axios.get(`${BASE_API_URL}${apiRoute}?year=${year}&season=${season}`);
+    const res = await axios.get(`${BASE_API_URL}${apiRoute}?year=${year}&season=${season}&`);
     const data = await res.data;
     if (data.length === 0) {
         await bot.sendMessage(chatId, "عذراً لا توجد ملفات حالياً");
@@ -47,6 +53,7 @@ async function processUserChoices(chatId, choises) {
 
 module.exports = {
     getCustomSubjects,
+    getCustomFiles,
     getCustomFile,
     processUserChoices,
 }
