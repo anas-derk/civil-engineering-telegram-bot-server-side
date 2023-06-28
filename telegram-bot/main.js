@@ -21,6 +21,7 @@ const { getCustomSubjects, getCustomFiles, getCustomFileData } = require("./func
 bot.onText(/\/start/, async (msg) => {
     const chatId = msg.chat.id;
     const userId = msg.from.id;
+    userChoises[chatId] = { year: null, season: null, service: null, subject: null, fileId: null };
     await bot.sendMessage(chatId, "مرحباً بك في البوت الخاص بنا");
     const memberInfo = await bot.getChatMember(channelId, userId);
     if (memberInfo.status === "left") {
@@ -151,7 +152,10 @@ bot.on("callback_query", async (query) => {
                     } else {
                         const fileUrl = `${BASE_API_URL}/${data.fileUrl}`;
                         const response = await axios.get(fileUrl, { responseType: 'arraybuffer' });
-                        await bot.sendDocument(chatId, response.data);
+                        await bot.sendDocument(chatId, response.data, {}, {
+                            filename: data.name,
+                            contentType: "application/pdf",
+                        });
                     }
                     break;
                 }
@@ -162,7 +166,10 @@ bot.on("callback_query", async (query) => {
                     } else {
                         const fileUrl = `${BASE_API_URL}/${data.fileUrl}`;
                         const response = await axios.get(fileUrl, { responseType: 'arraybuffer' });
-                        await bot.sendDocument(chatId, response.data);
+                        await bot.sendDocument(chatId, response.data, {}, {
+                            filename: data.name,
+                            contentType: "application/pdf",
+                        });
                     }
                     break;
                 }
@@ -173,7 +180,10 @@ bot.on("callback_query", async (query) => {
                     } else {
                         const fileUrl = `${BASE_API_URL}/${data.fileUrl}`;
                         const response = await axios.get(fileUrl, { responseType: 'arraybuffer' });
-                        await bot.sendDocument(chatId, response.data);
+                        await bot.sendDocument(chatId, response.data, {}, {
+                            filename: data.name,
+                            contentType: "application/pdf",
+                        });
                     }
                     break;
                 }
