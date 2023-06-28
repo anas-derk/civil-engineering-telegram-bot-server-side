@@ -1,8 +1,8 @@
 const medallionsRouter = require("express").Router();
 
-medallionsRouter.get("/custom-medallion-file", (req, res) => {
+medallionsRouter.get("/custom-medallion-file/:fileId", (req, res) => {
     const { getCustomMedallionFile } = require("../models/medallion.model");
-    getCustomMedallionFile(req.query).then((result) => {
+    getCustomMedallionFile(req.params.fileId).then((result) => {
         res.json(result);
     }).catch(err => console.log(err));
 });

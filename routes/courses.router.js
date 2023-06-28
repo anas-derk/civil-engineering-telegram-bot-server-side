@@ -1,8 +1,8 @@
 const coursesRouter = require("express").Router();
 
-coursesRouter.get("/custom-course-file", (req, res) => {
+coursesRouter.get("/custom-course-file/:fileId", (req, res) => {
     const { getCustomCourseFile } = require("../models/courses.model");
-    getCustomCourseFile(req.query).then((result) => {
+    getCustomCourseFile(req.params.fileId).then((result) => {
         res.json(result);
     }).catch(err => console.log(err));
 });

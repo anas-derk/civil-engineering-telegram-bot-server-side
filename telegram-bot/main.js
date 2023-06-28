@@ -14,7 +14,9 @@ let userChoises = {};
 
 const BASE_API_URL = require("../global/BASE_API_URL");
 
-const { getCustomSubjects, getCustomFiles, getCustomFile, processUserChoices } = require("./functions");
+const axios = require("axios");
+
+const { getCustomSubjects, getCustomFiles, getCustomFileData } = require("./functions");
 
 bot.onText(/\/start/, async (msg) => {
     const chatId = msg.chat.id;
@@ -84,7 +86,7 @@ bot.on("callback_query", async (query) => {
             });
         }
     }
-    else {
+    else if (!userChoises[chatId].subject){
         userChoises[chatId].subject = selectedValue;
         try {
             switch (userChoises[chatId].service) {
@@ -138,8 +140,51 @@ bot.on("callback_query", async (query) => {
         catch (err) {
             console.log(err);
         }
-        // userChoises[chatId].fileId = selectedValue;
-        // processUserChoices(chatId, userChoises[chatId]);
+    } else {
+        userChoises[chatId].fileId = selectedValue;
+        try {
+            switch (userChoises[chatId].service) {
+                case "medallions": {
+                    const data = await getCustomFile("/medallions/custom-medallion-file", userChoises[chatId].fileId);
+                    if (data) {
+                        await bot.sendMessage(chatId, "عذراً لا توجد ملفات حالياً");
+                    } else {
+                        const fileUrl = `${BASE_API_URL}/${data.fileUrl}`;
+                        const response = await axios.get(fileUrl, { responseType: 'arraybuffer' });
+                        await bot.sendDocument(chatId, response.data);
+                    }
+                    break;
+                }
+                case "courses": {
+                    const data = await getCustomFile("/courses/custom-course-file", userChoises[chatId].fileId);
+                    if (data) {
+                        await bot.sendMessage(chatId, "عذراً لا توجد ملفات حالياً");
+                    } else {
+                        const fileUrl = `${BASE_API_URL}/${data.fileUrl}`;
+                        const response = await axios.get(fileUrl, { responseType: 'arraybuffer' });
+                        await bot.sendDocument(chatId, response.data);
+                    }
+                    break;
+                }
+                case "lectures": {
+                    const data = await getCustomFileData("/lectures/custom-lecture-file", userChoises[chatId].fileId);
+                    if (Object.keys(data).length === 0) {
+                        await bot.sendMessage(chatId, "عذراً لا توجد ملفات حالياً");
+                    } else {
+                        const fileUrl = `${BASE_API_URL}/${data.fileUrl}`;
+                        const response = await axios.get(fileUrl, { responseType: 'arraybuffer' });
+                        await bot.sendDocument(chatId, response.data);
+                    }
+                    break;
+                }
+                default: {
+                    console.log(err);
+                }
+            }
+        }
+        catch (err) {
+            console.log(err);
+        }
     }
 });
 

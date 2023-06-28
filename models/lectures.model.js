@@ -39,16 +39,13 @@ async function addNewFile(data) {
     }
 }
 
-async function getCustomLectureFile(requestInfo) {
+async function getCustomLectureFile(fileId) {
     try {
         // الاتصال بقاعدة البيانات
         await mongoose.connect(DB_URL);
-        // جلب كل روابط المحاضرات في جدول المحاضرات
-        const lectures = await lecturesModel.find({
-            year: requestInfo.year,
-            season: requestInfo.season,
-        });
-        return lectures;
+        // جلب رابط الملف المحدد من جدول المحاضرات
+        const lectureFile = await lecturesModel.findById(fileId);
+        return lectureFile;
     } catch (err) {
         // في حالة حدث خطأ أثناء العملية ، نقطع الاتصال ونرمي استثناء بالخطأ
         mongoose.disconnect();

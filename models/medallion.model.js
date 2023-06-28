@@ -39,16 +39,13 @@ async function addNewFile(data) {
     }
 }
 
-async function getCustomMedallionFile(requestInfo) {
+async function getCustomMedallionFile(fileId) {
     try {
         // الاتصال بقاعدة البيانات
         await mongoose.connect(DB_URL);
-        // جلب كل روابط النوط في جدول النوط
-        const medallions = await medallionModel.find({
-            year: requestInfo.year,
-            season: requestInfo.season,
-        });
-        return medallions;
+        // جلب رابط الملف المحدد في جدول النوط
+        const medallionFile = await medallionModel.findById(fileId);
+        return medallionFile;
     } catch (err) {
         // في حالة حدث خطأ أثناء العملية ، نقطع الاتصال ونرمي استثناء بالخطأ
         mongoose.disconnect();

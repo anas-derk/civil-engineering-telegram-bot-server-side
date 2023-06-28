@@ -39,16 +39,13 @@ async function addNewFile(data) {
     }
 }
 
-async function getCustomCourseFile(requestInfo) {
+async function getCustomCourseFile(fileId) {
     try {
         // الاتصال بقاعدة البيانات
         await mongoose.connect(DB_URL);
-        // جلب كل روابط الكورسات في جدول الكورسات
-        const courses = await coursesModel.find({
-            year: requestInfo.year,
-            season: requestInfo.season,
-        });
-        return courses;
+        // جلب رابط الملف المحدد في جدول الكورسات
+        const courseFile = await coursesModel.findById(fileId);
+        return courseFile;
     } catch (err) {
         // في حالة حدث خطأ أثناء العملية ، نقطع الاتصال ونرمي استثناء بالخطأ
         mongoose.disconnect();
