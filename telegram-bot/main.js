@@ -1,24 +1,37 @@
-/* Start Handle Telegram Bot Events */
+/* Start Import Required Functions */
+const {
+    getCustomSubjects,
+    getCustomFiles,
+    getCustomFileData,
+    getAllSubjects
+} = require("./functions");
 
-const token = "6208009889:AAHn2kqO2IS2ojG-dYpNpOBcOCp1pWgvAXo";
+let {
+    token,
+    channelId,
+    channeURL,
+    BASE_API_URL,
+    subjectNames,
+    userChoises,
+} = require("./data");
+
+/* End Import Required Functions */
+
+/* Start Bot Initialize */
 
 const TelegramBot = require('node-telegram-bot-api');
 
 const bot = new TelegramBot(token, { polling: true });
 
-const channelId = "@Civil_Engineering_TU";
+/* End Bot Initialize */
 
-const channeURL = "https://t.me/Civil_Engineering_TU";
-
-const BASE_API_URL = require("../global/BASE_API_URL");
+/* Start Import Axios Module For Http Request */
 
 const axios = require("axios");
 
-const { getCustomSubjects, getCustomFiles, getCustomFileData, getAllSubjects } = require("./functions");
+/* End Import Axios Module For Http Request */
 
-let userChoises = {};
-
-let subjectNames = [];
+/* Start Handle Telegram Bot Events */
 
 bot.onText(/\/start/, async (msg) => {
     const chatId = msg.chat.id;
