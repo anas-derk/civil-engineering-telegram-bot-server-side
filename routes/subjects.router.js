@@ -14,4 +14,11 @@ subjectsRouter.get("/all-custom-subjects", (req, res) => {
     }).catch(err => console.log(err));
 });
 
+subjectsRouter.get("/all-subjects", (req, res) => {
+    const { getAllSubjects } = require("../models/subjects.model");
+    getAllSubjects().then((result) => {
+        res.json(result);
+    }).catch(err => console.log(err));
+});
+
 module.exports = subjectsRouter;

@@ -10,18 +10,22 @@ const channelId = "@Civil_Engineering_TU";
 
 const channeURL = "https://t.me/Civil_Engineering_TU";
 
-let userChoises = {};
-
 const BASE_API_URL = require("../global/BASE_API_URL");
 
 const axios = require("axios");
 
-const { getCustomSubjects, getCustomFiles, getCustomFileData } = require("./functions");
+const { getCustomSubjects, getCustomFiles, getCustomFileData, getAllSubjects } = require("./functions");
+
+let userChoises = {};
+
+let subjectNames = [];
 
 bot.onText(/\/start/, async (msg) => {
     const chatId = msg.chat.id;
     const userId = msg.from.id;
     userChoises[chatId] = { year: null, season: null, service: null, subject: null, fileId: null };
+    const data = await getAllSubjects("/subjects/all-subjects");
+    subjectNames = data.map((subject) => subject.name);
     await bot.sendMessage(chatId, "مرحباً بك في البوت الخاص بنا");
     const memberInfo = await bot.getChatMember(channelId, userId);
     if (memberInfo.status === "left") {
@@ -53,7 +57,7 @@ bot.on("callback_query", async (query) => {
         || selectedValue === "fourth-year"
         || selectedValue === "fifth-year"
     ) {
-        userChoises[chatId].year = selectedValue;
+        userChoises[chatId] = { year: selectedValue, season: null, service: null, subject: null, fileId: null };
         await bot.sendMessage(chatId, "الرجاء اختيار الفصل", {
             reply_markup: {
                 inline_keyboard: [
@@ -63,7 +67,13 @@ bot.on("callback_query", async (query) => {
             }
         });
     } else if (selectedValue === "first-season" || selectedValue === "second-season") {
-        userChoises[chatId].season = selectedValue;
+        userChoises[chatId] = {
+            year: userChoises[chatId].year,
+            season: selectedValue,
+            service: null,
+            subject: null,
+            fileId: null
+        };
         await bot.sendMessage(chatId, "الرجاء اختيار الخدمة المطلوبة", {
             reply_markup: {
                 inline_keyboard: [
@@ -74,7 +84,13 @@ bot.on("callback_query", async (query) => {
             }
         });
     } else if (selectedValue === "lectures" || selectedValue === "courses" || selectedValue === "medallions") {
-        userChoises[chatId].service = selectedValue;
+        userChoises[chatId] = {
+            year: userChoises[chatId].year,
+            season: userChoises[chatId].season,
+            service: selectedValue,
+            subject: null,
+            fileId: null
+        };
         const data = await getCustomSubjects(`/subjects/all-custom-subjects?year=${userChoises[chatId].year}&season=${userChoises[chatId].season}`);
         if (data.length === 0) {
             bot.sendMessage(chatId, "عذراً لا يوجد مواد حالياً");
@@ -87,8 +103,14 @@ bot.on("callback_query", async (query) => {
             });
         }
     }
-    else if (!userChoises[chatId].subject){
-        userChoises[chatId].subject = selectedValue;
+    else if (subjectNames.includes(selectedValue)){
+        userChoises[chatId] = {
+            year: userChoises[chatId].year,
+            season: userChoises[chatId].season,
+            service: userChoises[chatId].service,
+            subject: selectedValue,
+            fileId: null
+        };
         try {
             switch (userChoises[chatId].service) {
                 case "medallions": {

@@ -37,7 +37,22 @@ async function postAllSubjects(subjects) {
     }
 }
 
+async function getAllSubjects() {
+    try {
+        // الاتصال بقاعدة البيانات
+        await mongoose.connect(DB_URL);
+        // جلب كل أسماء المواد  في جدول المواد
+        const subjects = await subjectsModel.find({});
+        return subjects;
+    } catch (err) {
+        // في حالة حدث خطأ أثناء العملية ، نقطع الاتصال ونرمي استثناء بالخطأ
+        mongoose.disconnect();
+        throw Error(err);
+    }
+}
+
 module.exports = {
     getAllCustomSubjects,
     postAllSubjects,
+    getAllSubjects,
 }
