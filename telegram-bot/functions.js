@@ -1,6 +1,6 @@
 const axios = require("axios");
 
-const BASE_API_URL = require("../global/BASE_API_URL");
+const { BASE_API_URL } = require("./data");
 
 async function getCustomSubjects(apiRoute) {
     const res = await axios.get(`${BASE_API_URL}${apiRoute}`);
