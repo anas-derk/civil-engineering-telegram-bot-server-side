@@ -188,7 +188,7 @@ async function handleCallBackQuery(bot, query) {
             userChoises[chatId].fileId = selectedValue;
             switch (userChoises[chatId].service) {
                 case "medallions": {
-                    const data = await getCustomFile("/medallions/custom-medallion-file", userChoises[chatId].fileId);
+                    const data = await getCustomFileData("/medallions/custom-medallion-file", userChoises[chatId].fileId);
                     if (data) {
                         await bot.sendMessage(chatId, "عذراً لا توجد ملفات حالياً");
                     } else {
@@ -202,7 +202,7 @@ async function handleCallBackQuery(bot, query) {
                     break;
                 }
                 case "courses": {
-                    const data = await getCustomFile("/courses/custom-course-file", userChoises[chatId].fileId);
+                    const data = await getCustomFileData("/courses/custom-course-file", userChoises[chatId].fileId);
                     if (data) {
                         await bot.sendMessage(chatId, "عذراً لا توجد ملفات حالياً");
                     } else {
