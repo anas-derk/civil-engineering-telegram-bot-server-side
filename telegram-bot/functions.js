@@ -181,7 +181,7 @@ async function handleCallBackQuery(bot, query) {
                     break;
                 }
                 default: {
-                    console.log(err);
+                    console.log("aa");
                 }
             }
         } else {
@@ -203,6 +203,7 @@ async function handleCallBackQuery(bot, query) {
                 }
                 case "courses": {
                     const data = await getCustomFileData("/courses/custom-course-file", userChoises[chatId].fileId);
+                    console.log(data);
                     if (data) {
                         await bot.sendMessage(chatId, "عذراً لا توجد ملفات حالياً");
                     } else {
@@ -230,7 +231,7 @@ async function handleCallBackQuery(bot, query) {
                     break;
                 }
                 default: {
-                    console.log(err);
+                    console.log("bb");
                 }
             }
         }
