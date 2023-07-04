@@ -189,7 +189,7 @@ async function handleCallBackQuery(bot, query) {
             switch (userChoises[chatId].service) {
                 case "medallions": {
                     const data = await getCustomFileData("/medallions/custom-medallion-file", userChoises[chatId].fileId);
-                    if (data) {
+                    if (Object.keys(data).length === 0) {
                         await bot.sendMessage(chatId, "عذراً لا توجد ملفات حالياً");
                     } else {
                         const fileUrl = `${BASE_API_URL}/${data.fileUrl}`;
@@ -203,8 +203,7 @@ async function handleCallBackQuery(bot, query) {
                 }
                 case "courses": {
                     const data = await getCustomFileData("/courses/custom-course-file", userChoises[chatId].fileId);
-                    console.log(data);
-                    if (data) {
+                    if (Object.keys(data).length === 0) {
                         await bot.sendMessage(chatId, "عذراً لا توجد ملفات حالياً");
                     } else {
                         const fileUrl = `${BASE_API_URL}/${data.fileUrl}`;
