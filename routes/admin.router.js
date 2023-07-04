@@ -74,4 +74,14 @@ adminRouter.get("/admin-info/:adminId", (req, res) => {
     }
 });
 
+adminRouter.post("/add-new-ad", (req, res) => {
+    const { addAds } = require("../models/ads.model");
+    addAds(req.body.content).then((result) => {
+        res.json(result);
+    }).catch((err) => {
+        console.log(err);
+        res.status(500).json("عذراً حدث خطأ ، الرجاء إعادة العملية !!");
+    })
+});
+
 module.exports = adminRouter;

@@ -67,6 +67,20 @@ const subjectsSchema = new mongoose.Schema({
 
 const subjectsModel = mongoose.model("subject", subjectsSchema);
 
+// إنشاء كائن هيكل جدول الإعلانات
+
+const adsSchema = new mongoose.Schema({
+    content: String,
+    adsPostDate: {
+        type: Date,
+        default: Date.now(),
+    },
+});
+
+// إنشاء كائن جدول المواد
+
+const adsModel = mongoose.model("ad", adsSchema);
+
 module.exports = {
     mongoose,
     medallionModel,
@@ -74,4 +88,5 @@ module.exports = {
     lecturesModel,
     adminModel,
     subjectsModel,
+    adsModel,
 }
