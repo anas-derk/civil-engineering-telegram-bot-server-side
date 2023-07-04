@@ -52,3 +52,21 @@ app.use("/lectures", lecturesRouter);
 app.use("/subjects", subjectsRouter);
 
 /* End Handle The Routes */
+
+/* Start Bot Initialize */
+
+const token = "6208009889:AAHn2kqO2IS2ojG-dYpNpOBcOCp1pWgvAXo";
+
+const TelegramBot = require('node-telegram-bot-api');
+
+const bot = new TelegramBot(token, { polling: true });
+
+const { handleStartBot, handleCallBackQuery } = require("./telegram-bot/functions");
+
+bot.onText(/\/start/, (msg) => handleStartBot(bot, msg));
+
+bot.on("callback_query", (query) => handleCallBackQuery(bot, query));
+
+/* End Bot Initialize */
+
+module.exports = bot;

@@ -77,9 +77,21 @@ const adsSchema = new mongoose.Schema({
     },
 });
 
-// إنشاء كائن جدول المواد
+// إنشاء كائن جدول الإعلانات
 
 const adsModel = mongoose.model("ad", adsSchema);
+
+// إنشاء كائن هيكل جدول المستخدمين
+
+const usersSchema = new mongoose.Schema({
+    chatId: String,
+    userId: String,
+    userName: String,
+});
+
+// إنشاء كائن جدول الإعلانات
+
+const usersModel = mongoose.model("user", usersSchema);
 
 module.exports = {
     mongoose,
@@ -89,4 +101,5 @@ module.exports = {
     adminModel,
     subjectsModel,
     adsModel,
+    usersModel,
 }

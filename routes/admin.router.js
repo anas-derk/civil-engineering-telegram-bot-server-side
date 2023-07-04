@@ -25,7 +25,7 @@ adminRouter.post("/add-new-file", upload.single("file") , (req, res) => {
             break;
         }
         case "lectures": {
-            const { addNewFile } = require("../models/lectures.model");
+            const { addNewFile, getCustomLectureFile } = require("../models/lectures.model");
             addNewFile(fullData).then((result) => {
                 res.json(result);
             }).catch(err => console.log(err));
@@ -74,14 +74,25 @@ adminRouter.get("/admin-info/:adminId", (req, res) => {
     }
 });
 
-adminRouter.post("/add-new-ad", (req, res) => {
+adminRouter.post("/add-new-ad", async (req, res) => {
     const { addAds } = require("../models/ads.model");
-    addAds(req.body.content).then((result) => {
+    try {
+        const result = await addAds(req.body.content);
+        if (result === "تهانينا ، لقد تمّ إضافة الإعلان بنجاح") {
+            const { getAllUsers } = require("../models/users.model");
+            const users = await getAllUsers();
+            if (users.length > 0) {
+                const bot = require("../server");
+                for (let i = 0; i < users.length; i++) {
+                    await bot.sendMessage(users[i].chatId, req.body.content);
+                }
+            }
+        }
         res.json(result);
-    }).catch((err) => {
+    } catch(err) {
         console.log(err);
         res.status(500).json("عذراً حدث خطأ ، الرجاء إعادة العملية !!");
-    })
+    }
 });
 
 module.exports = adminRouter;
