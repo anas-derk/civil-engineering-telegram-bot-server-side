@@ -39,7 +39,14 @@ bot.onText(/\/start/, async (msg) => {
     userChoises[chatId] = { year: null, season: null, service: null, subject: null, fileId: null };
     const data = await getAllSubjects("/subjects/all-subjects");
     subjectNames = data.map((subject) => subject.name);
-    await bot.sendMessage(chatId, "مرحباً بك في البوت الخاص بنا");
+    await bot.sendMessage(chatId, "مرحباً بك في البوت الخاص بنا", {
+        reply_markup: {
+            keyboard: [
+                ["/start"],
+            ],
+            resize_keyboard: true,
+        }
+    });
     const memberInfo = await bot.getChatMember(channelId, userId);
     if (memberInfo.status === "left") {
         await bot.sendMessage(chatId, "عذراً أنت لست مشتركاً في قناتنا الرجاء الاشترك على الرابط : " + channeURL);
