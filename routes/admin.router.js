@@ -170,18 +170,22 @@ adminRouter.delete("/subject-files/delete-file/:fileId", async (req, res) => {
                 res.json(result);
                 break;
             }
-            // case "courses": {
-            //     const { getAllCustomCourses } = require("../models/courses.model");
-            //     const result = await getAllCustomCourses(req.query);
-            //     res.json(result);
-            //     break;
-            // }
-            // case "medallion": {
-            //     const { getAllCustomMedallions } = require("../models/medallion.model");
-            //     const result = await getAllCustomMedallions(req.query);
-            //     res.json(result);
-            //     break;
-            // }
+            case "courses": {
+                const { deleteCustomCourseFile } = require("../models/courses.model");
+                const result = await deleteCustomCourseFile(req.params.fileId);
+                const { unlinkSync } = require("fs");
+                unlinkSync(data.fileUrl);
+                res.json(result);
+                break;
+            }
+            case "medallion": {
+                const { deleteCustomMedallionFile } = require("../models/medallion.model");
+                const result = await deleteCustomMedallionFile(req.params.fileId);
+                const { unlinkSync } = require("fs");
+                unlinkSync(data.fileUrl);
+                res.json(result);
+                break;
+            }
             default: {
                 console.log("Error !!");
                 res.json("عذراً يوجد خطأ في إرسال البيانات");

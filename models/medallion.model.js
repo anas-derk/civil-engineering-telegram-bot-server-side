@@ -71,8 +71,24 @@ async function getAllCustomMedallions(filteredData) {
     }
 }
 
+async function deleteCustomMedallionFile(fileId) {
+    try {
+        // الاتصال بقاعدة البيانات
+        await mongoose.connect(DB_URL);
+        // البحث عن نوطة لها نفس رقم المعرّف وحذفه
+        await medallionModel.deleteOne({ _id: fileId });
+        // إرجاع رسالة نجاح العملية
+        return "تم حذف الملف بنجاح";
+    }catch(err) {
+        // في حالة حدث خطأ أثناء العملية ، نقطع الاتصال ونرمي استثناء بالخطأ
+        mongoose.disconnect();
+        throw Error(err);
+    }
+}
+
 module.exports = {
     addNewFile,
     getCustomMedallionFile,
     getAllCustomMedallions,
+    deleteCustomMedallionFile,
 }
