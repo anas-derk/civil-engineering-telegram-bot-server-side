@@ -123,4 +123,8 @@ adminRouter.delete("/ads/delete-ads/:adsId", async (req, res) => {
     }
 });
 
+adminRouter.get("/subject-files", async (req, res) => {
+    console.log(req.query);
+});
+
 module.exports = adminRouter;
