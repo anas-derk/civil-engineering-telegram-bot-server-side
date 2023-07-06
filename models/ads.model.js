@@ -35,7 +35,40 @@ async function addAds(content) {
     }
 }
 
+async function getAllAds() {
+    try {
+        // الاتصال بقاعدة البيانات
+        await mongoose.connect(DB_URL);
+        // جلب كل بيانات الإعلانات من جدول الإعلانات بترتيب تنازلي
+        const adsList = await adsModel.find({}).sort({ adsPostDate: -1 });
+        // قطع الاتصال بقاعدة البيانات وإعادة بيانات الإعلانات
+        await mongoose.disconnect();
+        return adsList;
+    } catch(err) {
+        // في حالة حدث خطأ أثناء العملية ، نقطع الاتصال ونرمي استثناء بالخطأ
+        await mongoose.disconnect();
+        throw Error(err);
+    }
+}
+
+async function deleteAds(adsId) {
+    try {
+        // الاتصال بقاعدة البيانات
+        await mongoose.connect(DB_URL);
+        // البحث عن إعلان له نفس رقم المعرّف وحذفه
+        await adsModel.deleteOne({ _id: adsId });
+        // إرجاع رسالة نجاح العملية
+        return "تم حذف الإعلان بنجاح";
+    }catch(err) {
+        // في حالة حدث خطأ أثناء العملية ، نقطع الاتصال ونرمي استثناء بالخطأ
+        mongoose.disconnect();
+        throw Error(err);
+    }
+}
+
 // تصدير الدوال المعرفة سابقاً
 module.exports = {
     addAds,
+    getAllAds,
+    deleteAds,
 }

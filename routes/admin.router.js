@@ -2,7 +2,7 @@ const adminRouter = require("express").Router();
 
 const upload = require("../global/multer.config");
 
-adminRouter.post("/add-new-file", upload.single("file") , (req, res) => {
+adminRouter.post("/add-new-file", upload.single("file"), (req, res) => {
     const data = req.body;
     const file = req.file;
     const fullData = {
@@ -89,9 +89,37 @@ adminRouter.post("/add-new-ad", async (req, res) => {
             }
         }
         res.json(result);
-    } catch(err) {
+    } catch (err) {
         console.log(err);
         res.status(500).json("عذراً حدث خطأ ، الرجاء إعادة العملية !!");
+    }
+});
+
+adminRouter.get("/ads/all-ads", async (req, res) => {
+    try {
+        const { getAllAds } = require("../models/ads.model");
+        const result = await getAllAds();
+        res.json(result);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json("عذراً حدث خطأ ، الرجاء إعادة العملية !!");
+    }
+});
+
+adminRouter.delete("/ads/delete-ads/:adsId", async (req, res) => {
+    // جلب رقم معرّف الإعلان
+    const adsId = req.params.adsId;
+    // في حالة رقم معرّف الإعلان غير موجود فإننا نرجع رسالة خطأ
+    if (!adsId) res.json("عذراً يجب إرسال معرّف الإعلان حتى يتم حذفه");
+    else {
+        // في حالة الرقم موجود فإننا نقوم بعملية حذف الإعلان من قاعدة البيانات
+        const { deleteAds } = require("../models/ads.model");
+        try {
+            const result = await deleteAds(adsId)
+            res.json(result);
+        } catch(err) {
+            console.log(err);
+        }
     }
 });
 
