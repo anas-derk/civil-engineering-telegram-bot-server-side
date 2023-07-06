@@ -124,7 +124,38 @@ adminRouter.delete("/ads/delete-ads/:adsId", async (req, res) => {
 });
 
 adminRouter.get("/subject-files", async (req, res) => {
-    console.log(req.query);
+    const data = req.query;
+    const service = data.service;
+    try {
+        switch(service) {
+            case "lectures": {
+                const { getAllCustomLectures } = require("../models/lectures.model");
+                const result = await getAllCustomLectures(req.query);
+                res.json(result);
+                break;
+            }
+            case "courses": {
+                const { getAllCustomCourses } = require("../models/courses.model");
+                const result = await getAllCustomCourses(req.query);
+                res.json(result);
+                break;
+            }
+            case "medallion": {
+                const { getAllCustomMedallions } = require("../models/medallion.model");
+                const result = await getAllCustomMedallions(req.query);
+                res.json(result);
+                break;
+            }
+            default: {
+                console.log("Error !!");
+                res.json("عذراً يوجد خطأ في إرسال البيانات");
+            }
+        }
+    }
+    catch(err) {
+        console.log(err);
+        req.json("عذراً حذث خطأ ، الرجاء إعادة المحاولة !!");
+    }
 });
 
 module.exports = adminRouter;
