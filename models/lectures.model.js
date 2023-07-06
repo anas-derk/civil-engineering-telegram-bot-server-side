@@ -71,8 +71,24 @@ async function getAllCustomLectures(filteredData) {
     }
 }
 
+async function deleteCustomLectureFile(fileId) {
+    try {
+        // الاتصال بقاعدة البيانات
+        await mongoose.connect(DB_URL);
+        // البحث عن محاضرة لها نفس رقم المعرّف وحذفه
+        await lecturesModel.deleteOne({ _id: fileId });
+        // إرجاع رسالة نجاح العملية
+        return "تم حذف الملف بنجاح";
+    }catch(err) {
+        // في حالة حدث خطأ أثناء العملية ، نقطع الاتصال ونرمي استثناء بالخطأ
+        mongoose.disconnect();
+        throw Error(err);
+    }
+}
+
 module.exports = {
     addNewFile,
     getCustomLectureFile,
     getAllCustomLectures,
+    deleteCustomLectureFile,
 }
